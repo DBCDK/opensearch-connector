@@ -10,7 +10,6 @@ import java.nio.charset.StandardCharsets;
 
 public class OpensearchQuery {
 
-    /* Todo: Add query terms and builder function */
     // Search separator, currently fixed to AND, but we may later wish to make this configurable
     private static String separator = " AND ";
 
