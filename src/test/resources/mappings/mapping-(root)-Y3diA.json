@@ -1,0 +1,22 @@
+{
+  "id" : "3fce8c95-60a5-3261-8bff-b03c4aa9b823",
+  "request" : {
+    "url" : "/?action=search&outputType=json&collectionType=work&outputFormat=marcxchange&agency=100200&profile=test&start=1&stepValue=10&query=is%3D9788764432589",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-(root)-Y3diA.json",
+    "headers" : {
+      "Date" : "Tue, 20 Oct 2020 13:31:32 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "dbcdk-action" : "search",
+      "dbcdk-agency" : "100200",
+      "Keep-Alive" : "timeout=5, max=100",
+      "Connection" : "Keep-Alive",
+      "Transfer-Encoding" : "chunked",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "3fce8c95-60a5-3261-8bff-b03c4aa9b823"
+}

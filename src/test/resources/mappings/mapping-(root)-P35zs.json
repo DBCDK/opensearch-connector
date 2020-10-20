@@ -1,0 +1,22 @@
+{
+  "id" : "ea22f44f-5aa3-3925-9212-213a009bd7a3",
+  "request" : {
+    "url" : "/?action=search&outputType=json&collectionType=work&outputFormat=marcxchange&agency=100200&profile=test&start=1&stepValue=10&query=id%3D24699773",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-(root)-P35zs.json",
+    "headers" : {
+      "Date" : "Tue, 20 Oct 2020 13:22:38 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "dbcdk-action" : "search",
+      "dbcdk-agency" : "100200",
+      "Keep-Alive" : "timeout=5, max=99",
+      "Connection" : "Keep-Alive",
+      "Transfer-Encoding" : "chunked",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "ea22f44f-5aa3-3925-9212-213a009bd7a3"
+}
