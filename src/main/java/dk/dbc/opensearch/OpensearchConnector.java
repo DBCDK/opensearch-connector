@@ -10,6 +10,7 @@ import dk.dbc.httpclient.HttpGet;
 import dk.dbc.invariant.InvariantUtil;
 
 import dk.dbc.opensearch.model.OpensearchEntity;
+import dk.dbc.opensearch.model.OpensearchResult;
 import net.jodah.failsafe.RetryPolicy;
 
 import javax.ws.rs.ProcessingException;
@@ -65,21 +66,25 @@ public class OpensearchConnector {
                 baseUrl, "baseUrl");
     }
 
-    public OpensearchEntity search(OpensearchQuery query) throws OpensearchConnectorException {
+    public OpensearchResult search(OpensearchQuery query) throws OpensearchConnectorException {
         final Stopwatch stopwatch = new Stopwatch();
 
-        // Todo: Add query terms
-        OpensearchEntity entity = sendRequest(String.format("?action=search&outputType=json&collectionType=work&outputFormat=marcxchange&"));
-        LOGGER.info("search took {} ms", stopwatch.getElapsedTime(TimeUnit.MILLISECONDS));
-
-        return entity;
+        try {
+            LOGGER.info("Search request with action=search: {}", query.build());
+            return sendRequest(String.format("?action=search&outputType=json&collectionType=work&outputFormat=marcxchange&%s", query.build()));
+        } catch(java.io.UnsupportedEncodingException exception) {
+            LOGGER.error("Query contains characters that can not be url encoded: {}", exception);
+            throw new OpensearchConnectorException("Query contains characters that can not be url encoded", exception);
+        } finally {
+            LOGGER.info("search took {} ms", stopwatch.getElapsedTime(TimeUnit.MILLISECONDS));
+        }
     }
 
     public void close() {
         failSafeHttpClient.getClient().close();
     }
 
-    private OpensearchEntity sendRequest(String query) throws OpensearchConnectorException {
+    private OpensearchResult sendRequest(String query) throws OpensearchConnectorException {
         LOGGER.info("Search request with query: {}", query);
 
         final HttpGet httpGet = new HttpGet(failSafeHttpClient).withBaseUrl(String.format("%s/%s", baseUrl, query));
@@ -89,13 +94,13 @@ public class OpensearchConnector {
         return readResponseEntity(response);
     }
 
-    private OpensearchEntity readResponseEntity(Response response) throws OpensearchConnectorException {
+    private OpensearchResult readResponseEntity(Response response) throws OpensearchConnectorException {
 
         final OpensearchEntity entity = response.readEntity(OpensearchEntity.class);
         if (entity == null) {
             throw new OpensearchConnectorException("Opensearch returned with null-valued %s entity");
         }
-        return entity;
+        return entity.getSearchResponse().getResult();
     }
 
     private void assertResponseStatus(Response response, Response.Status expectedStatus)
