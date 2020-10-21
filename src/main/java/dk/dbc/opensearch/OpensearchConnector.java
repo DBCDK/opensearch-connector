@@ -70,8 +70,21 @@ public class OpensearchConnector {
         final Stopwatch stopwatch = new Stopwatch();
 
         try {
-            LOGGER.info("Search request with action=search: {}", query.build());
-            return sendRequest(String.format("?action=search&outputType=json&collectionType=work&outputFormat=marcxchange&%s", query.build()));
+            LOGGER.info("Search request with action=search and query {}", query.build());
+
+            final HttpGet httpGet = new HttpGet(failSafeHttpClient)
+                    .withBaseUrl(baseUrl)
+                    .withQueryParameter("action", "search")
+                    .withQueryParameter("outputType", "json")
+                    .withQueryParameter("collectionType", "work")
+                    .withQueryParameter("outputFormat", "marcexchange")
+                    .withQueryParameter("agency", query.getAgency())
+                    .withQueryParameter("profile", query.getProfile())
+                    .withQueryParameter("start", query.getStart())
+                    .withQueryParameter("stepValue", query.getStepValue())
+                    .withQueryParameter("query", query.build());
+
+            return sendGetRequest(httpGet);
         } catch(java.io.UnsupportedEncodingException exception) {
             LOGGER.error("Query contains characters that can not be url encoded: {}", exception);
             throw new OpensearchConnectorException("Query contains characters that can not be url encoded", exception);
@@ -84,10 +97,9 @@ public class OpensearchConnector {
         failSafeHttpClient.getClient().close();
     }
 
-    private OpensearchResult sendRequest(String query) throws OpensearchConnectorException {
-        LOGGER.info("Search request with query: {}", query);
+    private OpensearchResult sendGetRequest(HttpGet httpGet) throws OpensearchConnectorException {
+        LOGGER.info("Search request with query: {}", httpGet.toString());
 
-        final HttpGet httpGet = new HttpGet(failSafeHttpClient).withBaseUrl(String.format("%s/%s", baseUrl, query));
         final Response response = httpGet.execute();
         assertResponseStatus(response, Response.Status.OK);
 

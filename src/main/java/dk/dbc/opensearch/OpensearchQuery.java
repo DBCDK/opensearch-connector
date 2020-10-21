@@ -19,6 +19,12 @@ public class OpensearchQuery {
     // Search profile - default using 'test'
     private String profile = "test";
 
+    // Starting result
+    private int start = 1;
+
+    // Max. Number of results per 'page'
+    private int stepValue = 10;
+
     // Freetext query string
     private String freetext;
 
@@ -70,6 +76,22 @@ public class OpensearchQuery {
         this.is = is;
     }
 
+    public int getStart() {
+        return start;
+    }
+
+    public void setStart(int start) {
+        this.start = start;
+    }
+
+    public int getStepValue() {
+        return stepValue;
+    }
+
+    public void setStepValue(int stepValue) {
+        this.stepValue = stepValue;
+    }
+
     public OpensearchQuery withFreetext(String text) {
         this.freetext = text;
         return this;
@@ -112,9 +134,6 @@ public class OpensearchQuery {
             query = addToQueryString(query, "is=" + is);
         }
 
-        return String.format("agency=%s&profile=%s&start=1&stepValue=10&query=%s",
-                agency,
-                profile,
-                URLEncoder.encode(query, StandardCharsets.UTF_8.toString()));
+        return URLEncoder.encode(query, StandardCharsets.UTF_8.toString());
     }
 }
