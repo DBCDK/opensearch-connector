@@ -1,0 +1,6 @@
+# IntelliJ project management
+.idea
+*.iml
+
+# Build artifacts
+target
