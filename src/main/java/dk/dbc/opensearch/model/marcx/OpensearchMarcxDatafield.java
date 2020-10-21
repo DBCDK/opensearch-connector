@@ -98,7 +98,7 @@ public class OpensearchMarcxDatafield {
      *
      * @param subfieldCode The subfield code
      * @return Return either the first found subfield with subfieldCode. If no subfields exists with the given
-     * subfieldCode, an empty subfieldfield is returned as to allow a construct such as 'getSubfield("q")' to return
+     * subfieldCode, an empty subfield is returned as to allow a construct such as 'getSubfield("q")' to return
      * an empty string instead of throwing an exception. Since this makes more sense in the scenarios where this getter
      * will be used.
      */
