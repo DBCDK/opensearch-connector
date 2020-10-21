@@ -144,4 +144,53 @@ public class OpensearchConnectorTest {
         assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[5].getSubfield()[0].getCode(), is("e"));
         assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[5].getSubfield()[0].getValue(), is("9788764432589"));
     }
+
+    @Test
+    public void testOpensearchGetNonexistingSubfieldValueFromResult() throws OpensearchConnectorException {
+        OpensearchResult result = connector.search(new OpensearchQuery().withIs("9788764432589"));
+        assertThat(result.hitCount, is(1));
+        assertThat(result.collectionCount, is(1));
+        assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
+
+        // Unknown field with fieldcode = 999
+        String value = result.getSearchResult()[0]
+                .getCollection()
+                .getObject()[0]
+                .getCollection()
+                .getRecord()
+                .getDatafield("999")
+                .getSubfield("q")
+                .getValue();
+        assertThat(value, is(""));
+
+        // Unknown subfield with subfieldcode = q in known field with fieldcode = 001
+        value = result.getSearchResult()[0]
+                .getCollection()
+                .getObject()[0]
+                .getCollection()
+                .getRecord()
+                .getDatafield("001")
+                .getSubfield("q")
+                .getValue();
+        assertThat(value, is(""));
+    }
+
+    @Test
+    public void testOpensearchGetFaustFromResult() throws OpensearchConnectorException {
+        OpensearchResult result = connector.search(new OpensearchQuery().withIs("9788764432589"));
+        assertThat(result.hitCount, is(1));
+        assertThat(result.collectionCount, is(1));
+        assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
+
+        // Long cumberson way with precise indexing
+        String faust = result.getSearchResult()[0]
+                .getCollection()
+                .getObject()[0]
+                .getCollection()
+                .getRecord()
+                .getDatafield("001")
+                .getSubfield("a")
+                .getValue();
+        assertThat(faust, is("24699773"));
+    }
 }

@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import dk.dbc.opensearch.model.OpensearchFieldValue;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -89,5 +91,26 @@ public class OpensearchMarcxDatafield {
     @Override
     public int hashCode() {
         return Objects.hash(tag, ind1, ind2, subfield);
+    }
+
+    /**
+     * Return the first found subfield with the given subfield code
+     *
+     * @param subfieldCode The subfield code
+     * @return Return either the first found subfield with subfieldCode. If no subfields exists with the given
+     * subfieldCode, an empty subfieldfield is returned as to allow a construct such as 'getSubfield("q")' to return
+     * an empty string instead of throwing an exception. Since this makes more sense in the scenarios where this getter
+     * will be used.
+     */
+    public OpensearchMarcxSubfield getSubfield(String subfieldCode) {
+        if( subfield == null || subfield.length == 0 ) {
+            return new OpensearchMarcxSubfield().withCode(subfieldCode).withValue("");
+        }
+
+        return Arrays.stream(subfield)
+                .sorted(Comparator.comparing(OpensearchMarcxSubfield::getCode))
+                .filter(sf -> sf.getCode().equals(subfieldCode))
+                .findFirst()
+                .orElse(new OpensearchMarcxSubfield().withCode(subfieldCode).withValue(""));
     }
 }
