@@ -45,13 +45,13 @@ pipeline {
 					  failedTotalAll: "0"])
 			}
 		}
-		stage("deploy") {
-			/*when {
+		/*stage("deploy") {
+			when {
 				branch "master"
 			}
 			steps {
 				sh "mvn jar:jar deploy:deploy"
-			}*/
-		}
+			}
+		}*/
 	}
 }
