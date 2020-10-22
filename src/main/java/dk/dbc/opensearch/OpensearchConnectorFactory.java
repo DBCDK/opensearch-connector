@@ -46,7 +46,6 @@ import javax.ws.rs.client.Client;
  */
 @ApplicationScoped
 public class OpensearchConnectorFactory {
-    @SuppressWarnings("PMD.UnnecessaryFullyQualifiedName") // Not needed for plugin version 3.12.0, but needed for 3.13.0
     private static final Logger LOGGER = LoggerFactory.getLogger(OpensearchConnectorFactory.class);
 
     public static OpensearchConnector create(String baseUrl) throws OpensearchConnectorException {
