@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
  * </p>
  */
 public class OpensearchConnector {
+    @SuppressWarnings("PMD.UnnecessaryFullyQualifiedName") // Not needed for plugin version 3.12.0, but needed for 3.13.0
     private static final Logger LOGGER = LoggerFactory.getLogger(OpensearchConnector.class);
 
     private static final RetryPolicy RETRY_POLICY = new RetryPolicy()
