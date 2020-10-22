@@ -46,7 +46,7 @@ import javax.ws.rs.client.Client;
  */
 @ApplicationScoped
 public class OpensearchConnectorFactory {
-    private static final Logger LOGGER = LoggerFactory.getLogger(dk.dbc.opensearch.OpensearchConnectorFactory.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OpensearchConnectorFactory.class);
 
     public static OpensearchConnector create(String baseUrl) throws OpensearchConnectorException {
         final Client client = HttpClient.newClient(new ClientConfig()

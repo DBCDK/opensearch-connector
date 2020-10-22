@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  * </p>
  */
 public class OpensearchConnector {
-    private static final Logger LOGGER = LoggerFactory.getLogger(dk.dbc.opensearch.OpensearchConnector.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OpensearchConnector.class);
 
     private static final RetryPolicy RETRY_POLICY = new RetryPolicy()
             .retryOn(Collections.singletonList(ProcessingException.class))
