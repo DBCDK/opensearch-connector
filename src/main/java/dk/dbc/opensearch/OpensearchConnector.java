@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
  * This class is thread safe, as long as the given web resources client remains thread safe.
  * </p>
  */
+@SuppressWarnings("PMD.UnnecessaryFullyQualifiedName") // Not needed for plugin version 3.12.0, but needed for 3.13.0
 public class OpensearchConnector {
     private static final Logger LOGGER = LoggerFactory.getLogger(OpensearchConnector.class);
 
