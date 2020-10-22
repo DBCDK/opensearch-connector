@@ -8,9 +8,6 @@ pipeline {
 		jdk 'jdk11'
 		maven 'Maven 3'
 	}
-	triggers {
-		pollSCM("H/03 * * * *")
-	}
 	options {
 		timestamps()
 	}
