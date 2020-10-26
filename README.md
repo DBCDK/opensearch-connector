@@ -35,7 +35,7 @@ OpensearchConnector connector;
 
 **Requirements**
 
-To build this project JDK 1.8 or higher and Apache Maven is required.
+To build this project JDK 11 and Apache Maven is required.
 
 ### License
 
