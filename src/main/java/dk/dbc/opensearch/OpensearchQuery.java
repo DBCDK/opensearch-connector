@@ -5,13 +5,17 @@
 
 package dk.dbc.opensearch;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 public class OpensearchQuery {
+    private static final Logger LOGGER = LoggerFactory.getLogger(OpensearchQuery.class);
 
-    // Search separator, currently fixed to AND, but we may later wish to make this configurable
-    private static String separator = " AND ";
+    // Search combiner
+    private OpensearchQueryCombiner combiner = OpensearchQueryCombiner.AND;
 
     // Agency - default using 100200
     private String agency = "100200";
@@ -92,6 +96,14 @@ public class OpensearchQuery {
         this.stepValue = stepValue;
     }
 
+    public void setCombiner(OpensearchQueryCombiner combiner) {
+        this.combiner = combiner;
+    }
+
+    public OpensearchQueryCombiner getCombiner() {
+        return this.combiner;
+    }
+
     public OpensearchQuery withFreetext(String text) {
         this.freetext = text;
         return this;
@@ -117,8 +129,17 @@ public class OpensearchQuery {
         return this;
     }
 
+    public OpensearchQuery withCombiner(OpensearchQueryCombiner combiner) {
+        this.combiner = combiner;
+        return this;
+    }
+
     private String addToQueryString(String query, String term) {
-        return (!query.isEmpty() ? separator : "") + term;
+        final String separator = combiner == OpensearchQueryCombiner.AND
+                ? " AND "
+                : " OR ";
+
+        return (!query.isEmpty() ? query + separator : "") + term;
     }
 
     public String build() throws java.io.UnsupportedEncodingException {
@@ -134,6 +155,8 @@ public class OpensearchQuery {
             query = addToQueryString(query, "is=" + is);
         }
 
-        return URLEncoder.encode(query, StandardCharsets.UTF_8.toString());
+        // Encode the query, but convert encoded blankspace from %2B (+) to %20 (real blank)
+        // since Opensearch do not understand the separator character '+'
+        return URLEncoder.encode(query, StandardCharsets.UTF_8.toString()).replace("+", "%20");
     }
 }
