@@ -10,7 +10,7 @@ import dk.dbc.httpclient.HttpGet;
 import dk.dbc.invariant.InvariantUtil;
 
 import dk.dbc.opensearch.model.OpensearchEntity;
-import dk.dbc.opensearch.model.OpensearchResult;
+import dk.dbc.opensearch.model.OpensearchSearchResponse;
 import net.jodah.failsafe.RetryPolicy;
 
 import javax.ws.rs.ProcessingException;
@@ -66,7 +66,7 @@ public class OpensearchConnector {
                 baseUrl, "baseUrl");
     }
 
-    public OpensearchResult search(OpensearchQuery query) throws OpensearchConnectorException {
+    public OpensearchSearchResponse search(OpensearchQuery query) throws OpensearchConnectorException {
         final Stopwatch stopwatch = new Stopwatch();
 
         try {
@@ -97,7 +97,7 @@ public class OpensearchConnector {
         failSafeHttpClient.getClient().close();
     }
 
-    private OpensearchResult sendGetRequest(HttpGet httpGet) throws OpensearchConnectorException {
+    private OpensearchSearchResponse sendGetRequest(HttpGet httpGet) throws OpensearchConnectorException {
         LOGGER.info("Search request with query: {}", httpGet.toString());
 
         final Response response = httpGet.execute();
@@ -106,13 +106,13 @@ public class OpensearchConnector {
         return readResponseEntity(response);
     }
 
-    private OpensearchResult readResponseEntity(Response response) throws OpensearchConnectorException {
+    private OpensearchSearchResponse readResponseEntity(Response response) throws OpensearchConnectorException {
 
         final OpensearchEntity entity = response.readEntity(OpensearchEntity.class);
         if (entity == null) {
             throw new OpensearchConnectorException("Opensearch returned with null-valued %s entity");
         }
-        return entity.getSearchResponse().getResult();
+        return entity.getSearchResponse();
     }
 
     private void assertResponseStatus(Response response, Response.Status expectedStatus)

@@ -8,6 +8,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import dk.dbc.httpclient.HttpClient;
 
 import dk.dbc.opensearch.model.OpensearchResult;
+import dk.dbc.opensearch.model.OpensearchSearchResponse;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.junit.jupiter.api.AfterAll;
@@ -53,7 +54,8 @@ public class OpensearchConnectorTest {
     public void testOpensearchSearchResponse() throws OpensearchConnectorException {
 
         try {
-            OpensearchResult result = connector.search(new OpensearchQuery().withAgency("870970").withFreetext("zebra"));
+            OpensearchSearchResponse response = connector.search(new OpensearchQuery().withAgency("870970").withFreetext("zebra"));
+            assertThat(response.getError().isEmpty(), is(true));
         }
         catch(OpensearchConnectorException connectorException) {
             throw connectorException;
@@ -64,7 +66,8 @@ public class OpensearchConnectorTest {
     public void testOpensearchHitCount() throws OpensearchConnectorException {
 
         try {
-            OpensearchResult result = connector.search(new OpensearchQuery().withAgency("870970").withFreetext("zebra"));
+            OpensearchSearchResponse response = connector.search(new OpensearchQuery().withAgency("870970").withFreetext("zebra"));
+            OpensearchResult result = response.getResult();
             assertThat(result.getHitCount(), is(581));
         }
         catch(OpensearchConnectorException connectorException) {
@@ -76,7 +79,8 @@ public class OpensearchConnectorTest {
     public void testOpensearchRandomSampleValues() throws OpensearchConnectorException {
 
         try {
-            OpensearchResult result = connector.search(new OpensearchQuery().withAgency("870970").withFreetext("zebra"));
+            OpensearchSearchResponse response = connector.search(new OpensearchQuery().withAgency("870970").withFreetext("zebra"));
+            OpensearchResult result = response.getResult();
             assertThat(result.collectionCount, is(10));
 
             // First object, first record and data
@@ -108,7 +112,8 @@ public class OpensearchConnectorTest {
 
     @Test
     public void testOpensearchIdSearchresult() throws OpensearchConnectorException {
-        OpensearchResult result = connector.search(new OpensearchQuery().withId("24699773"));
+        OpensearchSearchResponse response = connector.search(new OpensearchQuery().withId("24699773"));
+        OpensearchResult result = response.getResult();
         assertThat(result.collectionCount, is(1));
 
         assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
@@ -128,7 +133,8 @@ public class OpensearchConnectorTest {
 
     @Test
     public void testOpensearchIsSearchresult() throws OpensearchConnectorException {
-        OpensearchResult result = connector.search(new OpensearchQuery().withAgency("870970").withIs("9788764432589"));
+        OpensearchSearchResponse response = connector.search(new OpensearchQuery().withAgency("870970").withIs("9788764432589"));
+        OpensearchResult result = response.getResult();
         assertThat(result.hitCount, is(1));
         assertThat(result.collectionCount, is(1));
 
@@ -148,7 +154,8 @@ public class OpensearchConnectorTest {
 
     @Test
     public void testOpensearchGetNonexistingSubfieldValueFromResult() throws OpensearchConnectorException {
-        OpensearchResult result = connector.search(new OpensearchQuery().withAgency("870970").withIs("9788764432589"));
+        OpensearchSearchResponse response = connector.search(new OpensearchQuery().withAgency("870970").withIs("9788764432589"));
+        OpensearchResult result = response.getResult();
         assertThat(result.hitCount, is(1));
         assertThat(result.collectionCount, is(1));
         assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
@@ -178,7 +185,8 @@ public class OpensearchConnectorTest {
 
     @Test
     public void testOpensearchGetFaustFromResult() throws OpensearchConnectorException {
-        OpensearchResult result = connector.search(new OpensearchQuery().withAgency("870970").withIs("9788764432589"));
+        OpensearchSearchResponse response = connector.search(new OpensearchQuery().withAgency("870970").withIs("9788764432589"));
+        OpensearchResult result = response.getResult();
         assertThat(result.hitCount, is(1));
         assertThat(result.collectionCount, is(1));
         assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
@@ -197,16 +205,20 @@ public class OpensearchConnectorTest {
 
     @Test
     public void testOpensearchCombinedSearch() throws OpensearchConnectorException {
-        OpensearchResult result = connector.search(new OpensearchQuery().withAgency("870970").withCombiner(OpensearchQueryCombiner.AND).withId("24699773").withIs("9788764432589"));
+        OpensearchSearchResponse response = connector.search(new OpensearchQuery().withAgency("870970").withCombiner(OpensearchQueryCombiner.AND).withId("24699773").withIs("9788764432589"));
+        OpensearchResult result = response.getResult();
         assertThat(result.hitCount, is(1));
 
-        result = connector.search(new OpensearchQuery().withAgency("870970").withCombiner(OpensearchQueryCombiner.OR).withId("24699773").withIs("9788764432589"));
+        response = connector.search(new OpensearchQuery().withAgency("870970").withCombiner(OpensearchQueryCombiner.OR).withId("24699773").withIs("9788764432589"));
+        result = response.getResult();
         assertThat(result.hitCount, is(1));
 
-        result = connector.search(new OpensearchQuery().withAgency("870970").withCombiner(OpensearchQueryCombiner.AND).withId("24699773").withIs("no-such-isbn"));
+        response = connector.search(new OpensearchQuery().withAgency("870970").withCombiner(OpensearchQueryCombiner.AND).withId("24699773").withIs("no-such-isbn"));
+        result = response.getResult();
         assertThat(result.hitCount, is(0));
 
-        result = connector.search(new OpensearchQuery().withAgency("870970").withCombiner(OpensearchQueryCombiner.OR).withId("24699773").withIs("no-such-isbn"));
+        response = connector.search(new OpensearchQuery().withAgency("870970").withCombiner(OpensearchQueryCombiner.OR).withId("24699773").withIs("no-such-isbn"));
+        result = response.getResult();
         assertThat(result.hitCount, is(1));
     }
 }
