@@ -77,7 +77,7 @@ public class OpensearchConnector {
                     .withQueryParameter("action", "search")
                     .withQueryParameter("outputType", "json")
                     .withQueryParameter("collectionType", "work")
-                    .withQueryParameter("outputFormat", "marcexchange")
+                    .withQueryParameter("objectFormat", "marcxchange")
                     .withQueryParameter("agency", query.getAgency())
                     .withQueryParameter("profile", query.getProfile())
                     .withQueryParameter("start", query.getStart())

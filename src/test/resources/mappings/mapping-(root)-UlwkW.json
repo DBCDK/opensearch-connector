@@ -1,0 +1,22 @@
+{
+  "id" : "fc9d7357-4e77-3205-9ee9-704674e27ded",
+  "request" : {
+    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=100200&stepValue=10&profile=test&query=id%3D24699773&start=1&action=search&outputType=json",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-(root)-UlwkW.json",
+    "headers" : {
+      "Date" : "Tue, 27 Oct 2020 12:51:00 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "dbcdk-action" : "search",
+      "dbcdk-agency" : "100200",
+      "Keep-Alive" : "timeout=5, max=97",
+      "Connection" : "Keep-Alive",
+      "Transfer-Encoding" : "chunked",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "fc9d7357-4e77-3205-9ee9-704674e27ded"
+}

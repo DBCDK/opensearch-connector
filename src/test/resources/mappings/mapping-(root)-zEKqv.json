@@ -1,0 +1,22 @@
+{
+  "id" : "6579f118-a4ca-31ea-98ac-e43ecce82b53",
+  "request" : {
+    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=870970&stepValue=10&profile=test&query=id%3D24699773%20OR%20is%3D9788764432589&start=1&action=search&outputType=json",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-(root)-zEKqv.json",
+    "headers" : {
+      "Date" : "Tue, 27 Oct 2020 12:51:01 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "dbcdk-action" : "search",
+      "dbcdk-agency" : "870970",
+      "Keep-Alive" : "timeout=5, max=92",
+      "Connection" : "Keep-Alive",
+      "Transfer-Encoding" : "chunked",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "6579f118-a4ca-31ea-98ac-e43ecce82b53"
+}

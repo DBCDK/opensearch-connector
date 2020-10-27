@@ -26,8 +26,12 @@ public class OpensearchConnectorTestWireMockRecorder {
     private static void recordGetApplicantRequests(OpensearchConnectorTest OpensearchConnectorTest)
             throws OpensearchConnectorException {
         OpensearchConnectorTest.testOpensearchSearchResponse();
+        OpensearchConnectorTest.testOpensearchHitCount();
+        OpensearchConnectorTest.testOpensearchRandomSampleValues();
         OpensearchConnectorTest.testOpensearchIdSearchresult();
         OpensearchConnectorTest.testOpensearchIsSearchresult();
+        OpensearchConnectorTest.testOpensearchGetNonexistingSubfieldValueFromResult();
+        OpensearchConnectorTest.testOpensearchGetFaustFromResult();
     }
 
 }

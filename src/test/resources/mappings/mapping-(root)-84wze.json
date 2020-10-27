@@ -1,0 +1,22 @@
+{
+  "id" : "4dd26537-7d5e-343f-a787-096a7d6da9fb",
+  "request" : {
+    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=870970&stepValue=10&profile=test&query=id%3D24699773%20OR%20is%3Dno-such-isbn&start=1&action=search&outputType=json",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-(root)-84wze.json",
+    "headers" : {
+      "Date" : "Tue, 27 Oct 2020 12:51:01 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "dbcdk-action" : "search",
+      "dbcdk-agency" : "870970",
+      "Keep-Alive" : "timeout=5, max=90",
+      "Connection" : "Keep-Alive",
+      "Transfer-Encoding" : "chunked",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "4dd26537-7d5e-343f-a787-096a7d6da9fb"
+}

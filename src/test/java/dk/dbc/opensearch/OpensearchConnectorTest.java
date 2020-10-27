@@ -53,7 +53,7 @@ public class OpensearchConnectorTest {
     public void testOpensearchSearchResponse() throws OpensearchConnectorException {
 
         try {
-            OpensearchResult result = connector.search(new OpensearchQuery().withFreetext("zebra"));
+            OpensearchResult result = connector.search(new OpensearchQuery().withAgency("870970").withFreetext("zebra"));
         }
         catch(OpensearchConnectorException connectorException) {
             throw connectorException;
@@ -64,8 +64,8 @@ public class OpensearchConnectorTest {
     public void testOpensearchHitCount() throws OpensearchConnectorException {
 
         try {
-            OpensearchResult result = connector.search(new OpensearchQuery().withFreetext("zebra"));
-            assertThat(result.getHitCount(), is(571));
+            OpensearchResult result = connector.search(new OpensearchQuery().withAgency("870970").withFreetext("zebra"));
+            assertThat(result.getHitCount(), is(581));
         }
         catch(OpensearchConnectorException connectorException) {
             throw connectorException;
@@ -76,30 +76,30 @@ public class OpensearchConnectorTest {
     public void testOpensearchRandomSampleValues() throws OpensearchConnectorException {
 
         try {
-            OpensearchResult result = connector.search(new OpensearchQuery().withFreetext("zebra"));
+            OpensearchResult result = connector.search(new OpensearchQuery().withAgency("870970").withFreetext("zebra"));
             assertThat(result.collectionCount, is(10));
 
             // First object, first record and data
-            assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
-            assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getLeader(), is("00000n    2200000   4500"));
-            assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield().length, is(27));
-            assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[0].getTag(), is("001"));
-            assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[0].getSubfield().length, is(5));
-            assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[0].getSubfield()[0].getCode(), is("a"));
-            assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[0].getSubfield()[0].getValue(), is("49224842"));
-            assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[0].getSubfield()[2].getCode(), is("c"));
-            assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[0].getSubfield()[2].getValue(), is("20200612105613"));
-            assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[0].getSubfield()[4].getCode(), is("f"));
-            assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[0].getSubfield()[4].getValue(), is("a"));
+            assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(3));
+            assertThat(result.getSearchResult()[0].getCollection().getObject()[1].getCollection().getRecord().getLeader(), is("00000cape 22000000  4500"));
+            assertThat(result.getSearchResult()[0].getCollection().getObject()[1].getCollection().getRecord().getDatafield().length, is(27));
+            assertThat(result.getSearchResult()[0].getCollection().getObject()[1].getCollection().getRecord().getDatafield()[0].getTag(), is("001"));
+            assertThat(result.getSearchResult()[0].getCollection().getObject()[1].getCollection().getRecord().getDatafield()[0].getSubfield().length, is(5));
+            assertThat(result.getSearchResult()[0].getCollection().getObject()[1].getCollection().getRecord().getDatafield()[0].getSubfield()[0].getCode(), is("a"));
+            assertThat(result.getSearchResult()[0].getCollection().getObject()[1].getCollection().getRecord().getDatafield()[0].getSubfield()[0].getValue(), is("49224842"));
+            assertThat(result.getSearchResult()[0].getCollection().getObject()[1].getCollection().getRecord().getDatafield()[0].getSubfield()[2].getCode(), is("c"));
+            assertThat(result.getSearchResult()[0].getCollection().getObject()[1].getCollection().getRecord().getDatafield()[0].getSubfield()[2].getValue(), is("20200612105613"));
+            assertThat(result.getSearchResult()[0].getCollection().getObject()[1].getCollection().getRecord().getDatafield()[0].getSubfield()[4].getCode(), is("f"));
+            assertThat(result.getSearchResult()[0].getCollection().getObject()[1].getCollection().getRecord().getDatafield()[0].getSubfield()[4].getValue(), is("a"));
 
             // Last object, last record and data
             assertThat(result.getSearchResult()[9].getCollection().getNumberOfObjects(), is(1));
             assertThat(result.getSearchResult()[9].getCollection().getObject()[0].getCollection().getRecord().getLeader(), is("00000n    2200000   4500"));
-            assertThat(result.getSearchResult()[9].getCollection().getObject()[0].getCollection().getRecord().getDatafield().length, is(15));
-            assertThat(result.getSearchResult()[9].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[14].getTag(), is("996"));
-            assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[14].getSubfield().length, is(1));
-            assertThat(result.getSearchResult()[9].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[14].getSubfield()[0].getCode(), is("a"));
-            assertThat(result.getSearchResult()[9].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[14].getSubfield()[0].getValue(), is("DBC"));
+            assertThat(result.getSearchResult()[9].getCollection().getObject()[0].getCollection().getRecord().getDatafield().length, is(13));
+            assertThat(result.getSearchResult()[9].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[12].getTag(), is("996"));
+            assertThat(result.getSearchResult()[9].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[12].getSubfield().length, is(1));
+            assertThat(result.getSearchResult()[9].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[12].getSubfield()[0].getCode(), is("a"));
+            assertThat(result.getSearchResult()[9].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[12].getSubfield()[0].getValue(), is("DBC"));
         }
         catch(OpensearchConnectorException connectorException) {
             throw connectorException;
@@ -128,7 +128,8 @@ public class OpensearchConnectorTest {
 
     @Test
     public void testOpensearchIsSearchresult() throws OpensearchConnectorException {
-        OpensearchResult result = connector.search(new OpensearchQuery().withIs("9788764432589"));
+        OpensearchResult result = connector.search(new OpensearchQuery().withAgency("870970").withIs("9788764432589"));
+        assertThat(result.hitCount, is(1));
         assertThat(result.collectionCount, is(1));
 
         assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
@@ -147,7 +148,7 @@ public class OpensearchConnectorTest {
 
     @Test
     public void testOpensearchGetNonexistingSubfieldValueFromResult() throws OpensearchConnectorException {
-        OpensearchResult result = connector.search(new OpensearchQuery().withIs("9788764432589"));
+        OpensearchResult result = connector.search(new OpensearchQuery().withAgency("870970").withIs("9788764432589"));
         assertThat(result.hitCount, is(1));
         assertThat(result.collectionCount, is(1));
         assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
@@ -177,7 +178,7 @@ public class OpensearchConnectorTest {
 
     @Test
     public void testOpensearchGetFaustFromResult() throws OpensearchConnectorException {
-        OpensearchResult result = connector.search(new OpensearchQuery().withIs("9788764432589"));
+        OpensearchResult result = connector.search(new OpensearchQuery().withAgency("870970").withIs("9788764432589"));
         assertThat(result.hitCount, is(1));
         assertThat(result.collectionCount, is(1));
         assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
