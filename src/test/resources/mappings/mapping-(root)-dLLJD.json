@@ -1,7 +1,7 @@
 {
   "id" : "ab118aff-65a0-392d-b0b3-3b87929c7545",
   "request" : {
-    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=870970&stepValue=10&profile=test&query=%22zebra%22&start=1&action=search&outputType=json",
+    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=870970&stepValue=10&profile=test&query=%22zebra%22&start=1&action=search&outputType=json&repository=rawrepo_basis",
     "method" : "GET"
   },
   "response" : {

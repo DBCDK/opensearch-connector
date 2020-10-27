@@ -1,7 +1,7 @@
 {
   "id" : "f72c148c-4274-3043-8de0-e44103e1080e",
   "request" : {
-    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=870970&stepValue=10&profile=test&query=is%3D9788764432589&start=1&action=search&outputType=json",
+    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=870970&stepValue=10&profile=test&query=is%3D9788764432589&start=1&action=search&outputType=json&repository=rawrepo_basis",
     "method" : "GET"
   },
   "response" : {

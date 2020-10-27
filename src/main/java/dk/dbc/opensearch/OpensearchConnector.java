@@ -80,6 +80,7 @@ public class OpensearchConnector {
                     .withQueryParameter("objectFormat", "marcxchange")
                     .withQueryParameter("agency", query.getAgency())
                     .withQueryParameter("profile", query.getProfile())
+                    .withQueryParameter("repository", query.getRepository())
                     .withQueryParameter("start", query.getStart())
                     .withQueryParameter("stepValue", query.getStepValue())
                     .withQueryParameter("query", query.build());

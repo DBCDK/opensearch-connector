@@ -23,6 +23,9 @@ public class OpensearchQuery {
     // Search profile - default using 'test'
     private String profile = "test";
 
+    // Search repository
+    private String repository = "rawrepo_basis";
+
     // Starting result
     private int start = 1;
 
@@ -104,6 +107,14 @@ public class OpensearchQuery {
         return this.combiner;
     }
 
+    public String getRepository() {
+        return repository;
+    }
+
+    public void setRepository(String repository) {
+        this.repository = repository;
+    }
+
     public OpensearchQuery withFreetext(String text) {
         this.freetext = text;
         return this;
@@ -116,6 +127,11 @@ public class OpensearchQuery {
 
     public OpensearchQuery withProfile(String profile) {
         this.profile = profile;
+        return this;
+    }
+
+    public OpensearchQuery withRepository(String repository) {
+        this.repository = repository;
         return this;
     }
 

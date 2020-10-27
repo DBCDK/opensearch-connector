@@ -1,7 +1,7 @@
 {
   "id" : "fc9d7357-4e77-3205-9ee9-704674e27ded",
   "request" : {
-    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=100200&stepValue=10&profile=test&query=id%3D24699773&start=1&action=search&outputType=json",
+    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=100200&stepValue=10&profile=test&query=id%3D24699773&start=1&action=search&outputType=json&repository=rawrepo_basis",
     "method" : "GET"
   },
   "response" : {
