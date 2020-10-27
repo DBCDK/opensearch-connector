@@ -112,6 +112,13 @@ public class OpensearchConnector {
         if (entity == null) {
             throw new OpensearchConnectorException("Opensearch returned with null-valued %s entity");
         }
+
+        if(!entity.getSearchResponse().getError().isEmpty()) {
+            LOGGER.error("Error from Opensearch: {}", entity.getSearchResponse().getError());
+        } else {
+            LOGGER.info("Got response with {} results", entity.getSearchResponse().getResult().getHitCount());
+        }
+
         return entity.getSearchResponse();
     }
 
