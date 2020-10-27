@@ -32,6 +32,7 @@ public class OpensearchConnectorTestWireMockRecorder {
         OpensearchConnectorTest.testOpensearchIsSearchresult();
         OpensearchConnectorTest.testOpensearchGetNonexistingSubfieldValueFromResult();
         OpensearchConnectorTest.testOpensearchGetFaustFromResult();
+        OpensearchConnectorTest.testOpensearchCombinedSearch();
     }
 
 }

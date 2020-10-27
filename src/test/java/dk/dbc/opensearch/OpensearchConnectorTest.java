@@ -194,4 +194,19 @@ public class OpensearchConnectorTest {
                 .getValue();
         assertThat(faust, is("24699773"));
     }
+
+    @Test
+    public void testOpensearchCombinedSearch() throws OpensearchConnectorException {
+        OpensearchResult result = connector.search(new OpensearchQuery().withAgency("870970").withCombiner(OpensearchQueryCombiner.AND).withId("24699773").withIs("9788764432589"));
+        assertThat(result.hitCount, is(1));
+
+        result = connector.search(new OpensearchQuery().withAgency("870970").withCombiner(OpensearchQueryCombiner.OR).withId("24699773").withIs("9788764432589"));
+        assertThat(result.hitCount, is(1));
+
+        result = connector.search(new OpensearchQuery().withAgency("870970").withCombiner(OpensearchQueryCombiner.AND).withId("24699773").withIs("no-such-isbn"));
+        assertThat(result.hitCount, is(0));
+
+        result = connector.search(new OpensearchQuery().withAgency("870970").withCombiner(OpensearchQueryCombiner.OR).withId("24699773").withIs("no-such-isbn"));
+        assertThat(result.hitCount, is(1));
+    }
 }
