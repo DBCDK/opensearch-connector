@@ -27,7 +27,7 @@ public class OpensearchSearchResponse {
         return error;
     }
 
-    public void setError(OpensearchResult error) {
+    public void setError(OpensearchFieldValue error) {
         this.error = error.toString();
     }
 
