@@ -1,6 +1,6 @@
 package dk.dbc.opensearch;
 
-enum OpensearchQueryCombiner {
+public enum OpensearchQueryCombiner {
     AND,
     OR
 }
