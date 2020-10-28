@@ -18,7 +18,7 @@ public class OpensearchConnectorTestWireMockRecorder {
      */
     public static void main(String[] args) throws Exception {
         OpensearchConnectorTest.connector = new OpensearchConnector(
-                OpensearchConnectorTest.CLIENT, "http://localhost:8080");
+                OpensearchConnectorTest.CLIENT, "http://localhost:8080", "test", "100200", "rawrepo_basis");
         final OpensearchConnectorTest OpensearchConnectorTest = new OpensearchConnectorTest();
         recordGetApplicantRequests(OpensearchConnectorTest);
     }

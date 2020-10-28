@@ -48,8 +48,12 @@ public class OpensearchConnector {
     private FailSafeHttpClient failSafeHttpClient;
     private String baseUrl;
 
-    public OpensearchConnector(Client httpClient, String baseUrl) {
-        this(FailSafeHttpClient.create(httpClient, RETRY_POLICY), baseUrl);
+    private String profile;
+    private String agency;
+    private String repository;
+
+    public OpensearchConnector(Client httpClient, String baseUrl, String profile, String agency, String repository) {
+        this(FailSafeHttpClient.create(httpClient, RETRY_POLICY), baseUrl, profile, agency, repository);
     }
 
     /**
@@ -59,11 +63,17 @@ public class OpensearchConnector {
      * @param baseUrl            base URL for record service endpoint
      * @throws OpensearchConnectorException on failure to create {@link dk.dbc.opensearch.OpensearchConnector}
      */
-    public OpensearchConnector(FailSafeHttpClient failSafeHttpClient, String baseUrl) {
+    public OpensearchConnector(FailSafeHttpClient failSafeHttpClient, String baseUrl, String profile, String agency, String repository) {
         this.failSafeHttpClient = InvariantUtil.checkNotNullOrThrow(
                 failSafeHttpClient, "failSafeHttpClient");
         this.baseUrl = InvariantUtil.checkNotNullNotEmptyOrThrow(
                 baseUrl, "baseUrl");
+        this.profile = InvariantUtil.checkNotNullNotEmptyOrThrow(
+                profile, "profile");
+        this.agency = InvariantUtil.checkNotNullNotEmptyOrThrow(
+                agency, "agency");
+        this.repository = InvariantUtil.checkNotNullNotEmptyOrThrow(
+                repository, "repository");
     }
 
     public OpensearchSearchResponse search(OpensearchQuery query) throws OpensearchConnectorException {
@@ -78,9 +88,9 @@ public class OpensearchConnector {
                     .withQueryParameter("outputType", "json")
                     .withQueryParameter("collectionType", "work")
                     .withQueryParameter("objectFormat", "marcxchange")
-                    .withQueryParameter("agency", query.getAgency())
-                    .withQueryParameter("profile", query.getProfile())
-                    .withQueryParameter("repository", query.getRepository())
+                    .withQueryParameter("agency", agency)
+                    .withQueryParameter("profile", profile)
+                    .withQueryParameter("repository", repository)
                     .withQueryParameter("start", query.getStart())
                     .withQueryParameter("stepValue", query.getStepValue())
                     .withQueryParameter("query", query.build());

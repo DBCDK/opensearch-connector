@@ -1,0 +1,22 @@
+{
+  "id" : "e1fb856d-fcbe-3045-900e-763288a14203",
+  "request" : {
+    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=100200&stepValue=10&profile=test&query=id%3D24699773%20AND%20is%3Dno-such-isbn&start=1&action=search&outputType=json&repository=rawrepo_basis",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-(root)-UfUBC.json",
+    "headers" : {
+      "Date" : "Wed, 28 Oct 2020 10:05:05 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "dbcdk-action" : "search",
+      "dbcdk-agency" : "100200",
+      "Keep-Alive" : "timeout=5, max=91",
+      "Connection" : "Keep-Alive",
+      "Transfer-Encoding" : "chunked",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "e1fb856d-fcbe-3045-900e-763288a14203"
+}

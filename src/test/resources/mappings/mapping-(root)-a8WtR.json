@@ -1,0 +1,22 @@
+{
+  "id" : "0389f4df-80ed-3a7a-93b3-7146d3f11eea",
+  "request" : {
+    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=100200&stepValue=10&profile=test&query=id%3D24699773%20OR%20is%3D9788764432589&start=1&action=search&outputType=json&repository=rawrepo_basis",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-(root)-a8WtR.json",
+    "headers" : {
+      "Date" : "Wed, 28 Oct 2020 10:05:05 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "dbcdk-action" : "search",
+      "dbcdk-agency" : "100200",
+      "Keep-Alive" : "timeout=5, max=92",
+      "Connection" : "Keep-Alive",
+      "Transfer-Encoding" : "chunked",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "0389f4df-80ed-3a7a-93b3-7146d3f11eea"
+}

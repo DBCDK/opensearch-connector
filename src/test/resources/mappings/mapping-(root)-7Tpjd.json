@@ -1,0 +1,21 @@
+{
+  "id" : "64e6c877-7a77-36ff-bb34-e5e0123905a3",
+  "request" : {
+    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=100200&stepValue=10&profile=test&query=id%3D24699773%20AND%20is%3D9788779730014&start=1&action=search&outputType=json&repository=rawrepo_basis",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-(root)-7Tpjd.json",
+    "headers" : {
+      "Date" : "Wed, 28 Oct 2020 10:24:32 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "dbcdk-action" : "search",
+      "dbcdk-agency" : "100200",
+      "Keep-Alive" : "timeout=5, max=91",
+      "Connection" : "Keep-Alive",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "64e6c877-7a77-36ff-bb34-e5e0123905a3"
+}

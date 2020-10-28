@@ -17,15 +17,6 @@ public class OpensearchQuery {
     // Search combiner
     private OpensearchQueryCombiner combiner = OpensearchQueryCombiner.AND;
 
-    // Agency - default using 100200
-    private String agency = "100200";
-
-    // Search profile - default using 'test'
-    private String profile = "test";
-
-    // Search repository
-    private String repository = "rawrepo_basis";
-
     // Starting result
     private int start = 1;
 
@@ -42,22 +33,6 @@ public class OpensearchQuery {
     private String is;
 
     /* Place future needed index key fields here */
-
-    public String getAgency() {
-        return agency;
-    }
-
-    public void setAgency(String agency) {
-        this.agency = agency;
-    }
-
-    public String getProfile() {
-        return profile;
-    }
-
-    public void setProfile(String profile) {
-        this.profile = profile;
-    }
 
     public String getFreetext() {
         return freetext;
@@ -107,31 +82,8 @@ public class OpensearchQuery {
         return this.combiner;
     }
 
-    public String getRepository() {
-        return repository;
-    }
-
-    public void setRepository(String repository) {
-        this.repository = repository;
-    }
-
     public OpensearchQuery withFreetext(String text) {
         this.freetext = text;
-        return this;
-    }
-
-    public OpensearchQuery withAgency(String agency) {
-        this.agency = agency;
-        return this;
-    }
-
-    public OpensearchQuery withProfile(String profile) {
-        this.profile = profile;
-        return this;
-    }
-
-    public OpensearchQuery withRepository(String repository) {
-        this.repository = repository;
         return this;
     }
 
