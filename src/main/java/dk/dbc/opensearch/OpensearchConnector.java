@@ -10,7 +10,7 @@ import dk.dbc.httpclient.HttpGet;
 import dk.dbc.invariant.InvariantUtil;
 
 import dk.dbc.opensearch.model.OpensearchEntity;
-import dk.dbc.opensearch.model.OpensearchResult;
+import dk.dbc.opensearch.model.OpensearchSearchResponse;
 import net.jodah.failsafe.RetryPolicy;
 
 import javax.ws.rs.ProcessingException;
@@ -48,8 +48,12 @@ public class OpensearchConnector {
     private FailSafeHttpClient failSafeHttpClient;
     private String baseUrl;
 
-    public OpensearchConnector(Client httpClient, String baseUrl) {
-        this(FailSafeHttpClient.create(httpClient, RETRY_POLICY), baseUrl);
+    private String profile;
+    private String agency;
+    private String repository;
+
+    public OpensearchConnector(Client httpClient, String baseUrl, String profile, String agency, String repository) {
+        this(FailSafeHttpClient.create(httpClient, RETRY_POLICY), baseUrl, profile, agency, repository);
     }
 
     /**
@@ -59,14 +63,20 @@ public class OpensearchConnector {
      * @param baseUrl            base URL for record service endpoint
      * @throws OpensearchConnectorException on failure to create {@link dk.dbc.opensearch.OpensearchConnector}
      */
-    public OpensearchConnector(FailSafeHttpClient failSafeHttpClient, String baseUrl) {
+    public OpensearchConnector(FailSafeHttpClient failSafeHttpClient, String baseUrl, String profile, String agency, String repository) {
         this.failSafeHttpClient = InvariantUtil.checkNotNullOrThrow(
                 failSafeHttpClient, "failSafeHttpClient");
         this.baseUrl = InvariantUtil.checkNotNullNotEmptyOrThrow(
                 baseUrl, "baseUrl");
+        this.profile = InvariantUtil.checkNotNullNotEmptyOrThrow(
+                profile, "profile");
+        this.agency = InvariantUtil.checkNotNullNotEmptyOrThrow(
+                agency, "agency");
+        this.repository = InvariantUtil.checkNotNullNotEmptyOrThrow(
+                repository, "repository");
     }
 
-    public OpensearchResult search(OpensearchQuery query) throws OpensearchConnectorException {
+    public OpensearchSearchResponse search(OpensearchQuery query) throws OpensearchConnectorException {
         final Stopwatch stopwatch = new Stopwatch();
 
         try {
@@ -77,9 +87,10 @@ public class OpensearchConnector {
                     .withQueryParameter("action", "search")
                     .withQueryParameter("outputType", "json")
                     .withQueryParameter("collectionType", "work")
-                    .withQueryParameter("outputFormat", "marcexchange")
-                    .withQueryParameter("agency", query.getAgency())
-                    .withQueryParameter("profile", query.getProfile())
+                    .withQueryParameter("objectFormat", "marcxchange")
+                    .withQueryParameter("agency", agency)
+                    .withQueryParameter("profile", profile)
+                    .withQueryParameter("repository", repository)
                     .withQueryParameter("start", query.getStart())
                     .withQueryParameter("stepValue", query.getStepValue())
                     .withQueryParameter("query", query.build());
@@ -97,7 +108,7 @@ public class OpensearchConnector {
         failSafeHttpClient.getClient().close();
     }
 
-    private OpensearchResult sendGetRequest(HttpGet httpGet) throws OpensearchConnectorException {
+    private OpensearchSearchResponse sendGetRequest(HttpGet httpGet) throws OpensearchConnectorException {
         LOGGER.info("Search request with query: {}", httpGet.toString());
 
         final Response response = httpGet.execute();
@@ -106,13 +117,20 @@ public class OpensearchConnector {
         return readResponseEntity(response);
     }
 
-    private OpensearchResult readResponseEntity(Response response) throws OpensearchConnectorException {
+    private OpensearchSearchResponse readResponseEntity(Response response) throws OpensearchConnectorException {
 
         final OpensearchEntity entity = response.readEntity(OpensearchEntity.class);
         if (entity == null) {
             throw new OpensearchConnectorException("Opensearch returned with null-valued %s entity");
         }
-        return entity.getSearchResponse().getResult();
+
+        if(!entity.getSearchResponse().getError().isEmpty()) {
+            LOGGER.error("Error from Opensearch: {}", entity.getSearchResponse().getError());
+        } else {
+            LOGGER.info("Got response with {} results", entity.getSearchResponse().getResult().getHitCount());
+        }
+
+        return entity.getSearchResponse();
     }
 
     private void assertResponseStatus(Response response, Response.Status expectedStatus)

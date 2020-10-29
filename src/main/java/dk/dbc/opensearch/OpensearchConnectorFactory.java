@@ -17,6 +17,7 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
+import javax.swing.*;
 import javax.ws.rs.client.Client;
 
 /**
@@ -48,23 +49,35 @@ import javax.ws.rs.client.Client;
 public class OpensearchConnectorFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(OpensearchConnectorFactory.class);
 
-    public static OpensearchConnector create(String baseUrl) throws OpensearchConnectorException {
+    public static OpensearchConnector create(String baseUrl, String profile, String agency, String repository) throws OpensearchConnectorException {
         final Client client = HttpClient.newClient(new ClientConfig()
                 .register(new JacksonFeature()));
         LOGGER.info("Creating OpensearchConnector for: {}", baseUrl);
-        return new OpensearchConnector(client, baseUrl);
+        return new OpensearchConnector(client, baseUrl, profile, agency, repository);
     }
 
     @Inject
     @ConfigProperty(name = "OPENSEARCH_SERVICE_URL")
     private String baseUrl;
 
+    @Inject
+    @ConfigProperty(name = "OPENSEARCH_PROFILE", defaultValue = "test")
+    private String profile;
+
+    @Inject
+    @ConfigProperty(name = "OPENSEARCH_AGENCY", defaultValue = "100200")
+    private String agency;
+
+    @Inject
+    @ConfigProperty(name = "OPENSEARCH_REPOSITORY", defaultValue = "rawrepo_basis")
+    private String repository;
+
     OpensearchConnector opensearchConnector;
 
     @PostConstruct
     public void initializeConnector() {
         try {
-            opensearchConnector = dk.dbc.opensearch.OpensearchConnectorFactory.create(baseUrl);
+            opensearchConnector = dk.dbc.opensearch.OpensearchConnectorFactory.create(baseUrl, profile, agency, repository);
         } catch (OpensearchConnectorException e) {
             throw new IllegalStateException(e);
         }

@@ -5,19 +5,17 @@
 
 package dk.dbc.opensearch;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 public class OpensearchQuery {
+    private static final Logger LOGGER = LoggerFactory.getLogger(OpensearchQuery.class);
 
-    // Search separator, currently fixed to AND, but we may later wish to make this configurable
-    private static String separator = " AND ";
-
-    // Agency - default using 100200
-    private String agency = "100200";
-
-    // Search profile - default using 'test'
-    private String profile = "test";
+    // Search combiner
+    private OpensearchQueryCombiner combiner = OpensearchQueryCombiner.AND;
 
     // Starting result
     private int start = 1;
@@ -35,22 +33,6 @@ public class OpensearchQuery {
     private String is;
 
     /* Place future needed index key fields here */
-
-    public String getAgency() {
-        return agency;
-    }
-
-    public void setAgency(String agency) {
-        this.agency = agency;
-    }
-
-    public String getProfile() {
-        return profile;
-    }
-
-    public void setProfile(String profile) {
-        this.profile = profile;
-    }
 
     public String getFreetext() {
         return freetext;
@@ -92,18 +74,16 @@ public class OpensearchQuery {
         this.stepValue = stepValue;
     }
 
+    public void setCombiner(OpensearchQueryCombiner combiner) {
+        this.combiner = combiner;
+    }
+
+    public OpensearchQueryCombiner getCombiner() {
+        return this.combiner;
+    }
+
     public OpensearchQuery withFreetext(String text) {
         this.freetext = text;
-        return this;
-    }
-
-    public OpensearchQuery withAgency(String agency) {
-        this.agency = agency;
-        return this;
-    }
-
-    public OpensearchQuery withProfile(String profile) {
-        this.profile = profile;
         return this;
     }
 
@@ -117,8 +97,17 @@ public class OpensearchQuery {
         return this;
     }
 
+    public OpensearchQuery withCombiner(OpensearchQueryCombiner combiner) {
+        this.combiner = combiner;
+        return this;
+    }
+
     private String addToQueryString(String query, String term) {
-        return (!query.isEmpty() ? separator : "") + term;
+        final String separator = combiner == OpensearchQueryCombiner.AND
+                ? " AND "
+                : " OR ";
+
+        return (!query.isEmpty() ? query + separator : "") + term;
     }
 
     public String build() throws java.io.UnsupportedEncodingException {
@@ -134,6 +123,8 @@ public class OpensearchQuery {
             query = addToQueryString(query, "is=" + is);
         }
 
-        return URLEncoder.encode(query, StandardCharsets.UTF_8.toString());
+        // Encode the query, but convert encoded blankspace from %2B (+) to %20 (real blank)
+        // since Opensearch do not understand the separator character '+'
+        return URLEncoder.encode(query, StandardCharsets.UTF_8.toString()).replace("+", "%20");
     }
 }

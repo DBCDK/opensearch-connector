@@ -8,6 +8,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import dk.dbc.httpclient.HttpClient;
 
 import dk.dbc.opensearch.model.OpensearchResult;
+import dk.dbc.opensearch.model.OpensearchSearchResponse;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.junit.jupiter.api.AfterAll;
@@ -41,7 +42,7 @@ public class OpensearchConnectorTest {
 
     @BeforeAll
     static void setConnector() throws OpensearchConnectorException {
-        connector = new OpensearchConnector(CLIENT, wireMockHost);
+        connector = new OpensearchConnector(CLIENT, wireMockHost, "test", "100200", "rawrepo_basis");
     }
 
     @AfterAll
@@ -53,7 +54,8 @@ public class OpensearchConnectorTest {
     public void testOpensearchSearchResponse() throws OpensearchConnectorException {
 
         try {
-            OpensearchResult result = connector.search(new OpensearchQuery().withFreetext("zebra"));
+            OpensearchSearchResponse response = connector.search(new OpensearchQuery().withFreetext("zebra"));
+            assertThat(response.getError().isEmpty(), is(true));
         }
         catch(OpensearchConnectorException connectorException) {
             throw connectorException;
@@ -64,8 +66,9 @@ public class OpensearchConnectorTest {
     public void testOpensearchHitCount() throws OpensearchConnectorException {
 
         try {
-            OpensearchResult result = connector.search(new OpensearchQuery().withFreetext("zebra"));
-            assertThat(result.getHitCount(), is(571));
+            OpensearchSearchResponse response = connector.search(new OpensearchQuery().withFreetext("zebra"));
+            OpensearchResult result = response.getResult();
+            assertThat(result.getHitCount(), is(572));
         }
         catch(OpensearchConnectorException connectorException) {
             throw connectorException;
@@ -76,7 +79,8 @@ public class OpensearchConnectorTest {
     public void testOpensearchRandomSampleValues() throws OpensearchConnectorException {
 
         try {
-            OpensearchResult result = connector.search(new OpensearchQuery().withFreetext("zebra"));
+            OpensearchSearchResponse response = connector.search(new OpensearchQuery().withFreetext("zebra"));
+            OpensearchResult result = response.getResult();
             assertThat(result.collectionCount, is(10));
 
             // First object, first record and data
@@ -97,7 +101,7 @@ public class OpensearchConnectorTest {
             assertThat(result.getSearchResult()[9].getCollection().getObject()[0].getCollection().getRecord().getLeader(), is("00000n    2200000   4500"));
             assertThat(result.getSearchResult()[9].getCollection().getObject()[0].getCollection().getRecord().getDatafield().length, is(15));
             assertThat(result.getSearchResult()[9].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[14].getTag(), is("996"));
-            assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[14].getSubfield().length, is(1));
+            assertThat(result.getSearchResult()[9].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[14].getSubfield().length, is(1));
             assertThat(result.getSearchResult()[9].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[14].getSubfield()[0].getCode(), is("a"));
             assertThat(result.getSearchResult()[9].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[14].getSubfield()[0].getValue(), is("DBC"));
         }
@@ -108,7 +112,8 @@ public class OpensearchConnectorTest {
 
     @Test
     public void testOpensearchIdSearchresult() throws OpensearchConnectorException {
-        OpensearchResult result = connector.search(new OpensearchQuery().withId("24699773"));
+        OpensearchSearchResponse response = connector.search(new OpensearchQuery().withId("24699773"));
+        OpensearchResult result = response.getResult();
         assertThat(result.collectionCount, is(1));
 
         assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
@@ -128,7 +133,9 @@ public class OpensearchConnectorTest {
 
     @Test
     public void testOpensearchIsSearchresult() throws OpensearchConnectorException {
-        OpensearchResult result = connector.search(new OpensearchQuery().withIs("9788764432589"));
+        OpensearchSearchResponse response = connector.search(new OpensearchQuery().withIs("9788764432589"));
+        OpensearchResult result = response.getResult();
+        assertThat(result.hitCount, is(1));
         assertThat(result.collectionCount, is(1));
 
         assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
@@ -147,7 +154,8 @@ public class OpensearchConnectorTest {
 
     @Test
     public void testOpensearchGetNonexistingSubfieldValueFromResult() throws OpensearchConnectorException {
-        OpensearchResult result = connector.search(new OpensearchQuery().withIs("9788764432589"));
+        OpensearchSearchResponse response = connector.search(new OpensearchQuery().withIs("9788764432589"));
+        OpensearchResult result = response.getResult();
         assertThat(result.hitCount, is(1));
         assertThat(result.collectionCount, is(1));
         assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
@@ -177,7 +185,8 @@ public class OpensearchConnectorTest {
 
     @Test
     public void testOpensearchGetFaustFromResult() throws OpensearchConnectorException {
-        OpensearchResult result = connector.search(new OpensearchQuery().withIs("9788764432589"));
+        OpensearchSearchResponse response = connector.search(new OpensearchQuery().withIs("9788764432589"));
+        OpensearchResult result = response.getResult();
         assertThat(result.hitCount, is(1));
         assertThat(result.collectionCount, is(1));
         assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
@@ -192,5 +201,20 @@ public class OpensearchConnectorTest {
                 .getSubfield("a")
                 .getValue();
         assertThat(faust, is("24699773"));
+    }
+
+    @Test
+    public void testOpensearchCombinedSearch() throws OpensearchConnectorException {
+        OpensearchSearchResponse response = connector.search(new OpensearchQuery().withCombiner(OpensearchQueryCombiner.AND).withId("24699773").withIs("9788764432589"));
+        OpensearchResult result = response.getResult();
+        assertThat(result.hitCount, is(1));
+
+        response = connector.search(new OpensearchQuery().withCombiner(OpensearchQueryCombiner.OR).withId("24699773").withIs("9788779730014"));
+        result = response.getResult();
+        assertThat(result.hitCount, is(2));
+
+        response = connector.search(new OpensearchQuery().withCombiner(OpensearchQueryCombiner.AND).withId("24699773").withIs("9788779730014"));
+        result = response.getResult();
+        assertThat(result.hitCount, is(0));
     }
 }

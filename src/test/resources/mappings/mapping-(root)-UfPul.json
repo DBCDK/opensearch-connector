@@ -1,0 +1,22 @@
+{
+  "id" : "b766a762-f959-3fb2-a92f-0b90352eab8e",
+  "request" : {
+    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=100200&stepValue=10&profile=test&query=is%3D9788764432589&start=1&action=search&outputType=json&repository=rawrepo_basis",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-(root)-UfPul.json",
+    "headers" : {
+      "Date" : "Wed, 28 Oct 2020 10:05:04 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "dbcdk-action" : "search",
+      "dbcdk-agency" : "100200",
+      "Keep-Alive" : "timeout=5, max=96",
+      "Connection" : "Keep-Alive",
+      "Transfer-Encoding" : "chunked",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "b766a762-f959-3fb2-a92f-0b90352eab8e"
+}

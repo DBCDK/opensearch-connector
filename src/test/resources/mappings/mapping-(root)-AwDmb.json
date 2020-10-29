@@ -1,0 +1,22 @@
+{
+  "id" : "2ad0b104-4f0d-33b4-a2cd-e85a4be45cdc",
+  "request" : {
+    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=100200&stepValue=10&profile=test&query=id%3D24699773&start=1&action=search&outputType=json&repository=rawrepo_basis",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-(root)-AwDmb.json",
+    "headers" : {
+      "Date" : "Wed, 28 Oct 2020 10:05:04 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "dbcdk-action" : "search",
+      "dbcdk-agency" : "100200",
+      "Keep-Alive" : "timeout=5, max=97",
+      "Connection" : "Keep-Alive",
+      "Transfer-Encoding" : "chunked",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "2ad0b104-4f0d-33b4-a2cd-e85a4be45cdc"
+}
