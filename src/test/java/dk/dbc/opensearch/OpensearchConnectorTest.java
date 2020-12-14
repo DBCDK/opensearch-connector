@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.client.Client;
 
+import java.util.Arrays;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.hamcrest.CoreMatchers.is;
@@ -216,5 +218,20 @@ public class OpensearchConnectorTest {
         response = connector.search(new OpensearchQuery().withCombiner(OpensearchQueryCombiner.AND).withId("24699773").withIs("9788779730014"));
         result = response.getResult();
         assertThat(result.hitCount, is(0));
+    }
+
+    @Test
+    public void testOpensearchBcSearchresult() throws OpensearchConnectorException {
+        OpensearchSearchResponse response = connector.search(new OpensearchQuery().withBc("5053083221386"));
+        OpensearchResult result = response.getResult();
+        assertThat(result.hitCount, is(1));
+        assertThat(result.collectionCount, is(1));
+
+        assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
+        assertThat(Arrays.stream(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()).count(), is(43L));
+        assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[6].getTag(), is("023"));
+        assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[6].getSubfield().length, is(1));
+        assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[6].getSubfield()[0].getCode(), is("b"));
+        assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[6].getSubfield()[0].getValue(), is("5053083221386"));
     }
 }
