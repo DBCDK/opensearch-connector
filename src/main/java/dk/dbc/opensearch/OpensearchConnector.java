@@ -16,7 +16,7 @@ import net.jodah.failsafe.RetryPolicy;
 import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.core.Response;
-import java.util.Collections;
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 import dk.dbc.util.Stopwatch;
@@ -36,13 +36,13 @@ import org.slf4j.LoggerFactory;
 public class OpensearchConnector {
     private static final Logger LOGGER = LoggerFactory.getLogger(OpensearchConnector.class);
 
-    private static final RetryPolicy RETRY_POLICY = new RetryPolicy()
-            .retryOn(Collections.singletonList(ProcessingException.class))
-            .retryIf((Response response) ->
+    private static final RetryPolicy<Response> RETRY_POLICY = new RetryPolicy<Response>()
+            .handle(ProcessingException.class)
+            .handleResultIf(response ->
                     response.getStatus() == 404
                             || response.getStatus() == 500
                             || response.getStatus() == 502)
-            .withDelay(5, TimeUnit.SECONDS)
+            .withDelay(Duration.ofSeconds(5))
             .withMaxRetries(3);
 
     private FailSafeHttpClient failSafeHttpClient;
