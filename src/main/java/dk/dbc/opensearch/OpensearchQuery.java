@@ -32,6 +32,9 @@ public class OpensearchQuery {
     // Index key 'is'
     private String is;
 
+    // Index key 'bc'
+    private String bc;
+
     /* Place future needed index key fields here */
 
     public String getFreetext() {
@@ -56,6 +59,14 @@ public class OpensearchQuery {
 
     public void setIs(String is) {
         this.is = is;
+    }
+
+    public String getBc() {
+        return bc;
+    }
+
+    public void setBc(String bc) {
+        this.bc = bc;
     }
 
     public int getStart() {
@@ -97,6 +108,11 @@ public class OpensearchQuery {
         return this;
     }
 
+    public OpensearchQuery withBc(String bc) {
+        this.bc = bc;
+        return this;
+    }
+
     public OpensearchQuery withCombiner(OpensearchQueryCombiner combiner) {
         this.combiner = combiner;
         return this;
@@ -121,6 +137,9 @@ public class OpensearchQuery {
         }
         if(this.is != null && !this.is.isBlank()) {
             query = addToQueryString(query, "is=" + is);
+        }
+        if(this.bc != null && !this.bc.isBlank()) {
+            query = addToQueryString(query, "bc=" + bc);
         }
 
         // Encode the query, but convert encoded blankspace from %2B (+) to %20 (real blank)

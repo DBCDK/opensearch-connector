@@ -13,6 +13,7 @@ public class OpensearchConnectorTestWireMockRecorder {
             java -jar wiremock-standalone-{WIRE_MOCK_VERSION}.jar --proxy-all="{Opensearch_SERVICE_HOST}" --record-mappings --verbose
 
         * Run the main method of this class
+            mvn exec:java -Dexec.mainClass="dk.dbc.opensearch.OpensearchConnectorTestWireMockRecorder"
 
         * Replace content of src/test/resources/{__files|mappings} with that produced by the standalone runner
      */
@@ -33,6 +34,7 @@ public class OpensearchConnectorTestWireMockRecorder {
         OpensearchConnectorTest.testOpensearchGetNonexistingSubfieldValueFromResult();
         OpensearchConnectorTest.testOpensearchGetFaustFromResult();
         OpensearchConnectorTest.testOpensearchCombinedSearch();
+        OpensearchConnectorTest.testOpensearchBcSearchresult();
     }
 
 }

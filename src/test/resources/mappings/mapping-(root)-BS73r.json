@@ -1,0 +1,20 @@
+{
+  "id" : "3f2c8da7-5eda-3d32-8ba4-c3f0459e7ea6",
+  "request" : {
+    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=100200&stepValue=10&profile=test&query=bc%3D5053083221386&start=1&action=search&outputType=json&repository=rawrepo_basis",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-(root)-BS73r.json",
+    "headers" : {
+      "date" : "Mon, 14 Dec 2020 15:43:59 GMT",
+      "server" : "Apache/2.4.38 (Debian)",
+      "dbcdk-action" : "search",
+      "dbcdk-agency" : "100200",
+      "transfer-encoding" : "chunked",
+      "content-type" : "application/json"
+    }
+  },
+  "uuid" : "3f2c8da7-5eda-3d32-8ba4-c3f0459e7ea6"
+}
