@@ -234,4 +234,23 @@ public class OpensearchConnectorTest {
         assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[6].getSubfield()[0].getCode(), is("b"));
         assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[6].getSubfield()[0].getValue(), is("5053083221386"));
     }
+
+    @Test
+    public void testOpensearchMarc001bSearchresult() throws OpensearchConnectorException {
+        try {
+            OpensearchSearchResponse response = connector.search(new OpensearchQuery().withId("24699773").withMarc001b("870970"));
+            OpensearchResult result = response.getResult();
+            assertThat(result.getHitCount(), is(572));
+        }
+        catch(OpensearchConnectorException connectorException) {
+            throw connectorException;
+        }
+
+//        OpensearchSearchResponse response = connector.search(new OpensearchQuery().withMarc001b("870970"));//.withId("24699773"));
+//        OpensearchResult result = response.getResult();
+//        assertThat(result.hitCount, is(1));
+//        assertThat(result.collectionCount, is(1));
+//
+//        assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
+    }
 }
