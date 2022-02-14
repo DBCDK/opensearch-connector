@@ -1,8 +1,3 @@
-/*
- * Copyright Dansk Bibliotekscenter a/s. Licensed under GPLv3
- * See license text in LICENSE.txt or at https://opensource.dbc.dk/licenses/gpl-3.0/
- */
-
 package dk.dbc.opensearch;
 
 import org.slf4j.Logger;
@@ -35,7 +30,7 @@ public class OpensearchQuery {
     // Index key 'bc'
     private String bc;
 
-    // Index key 'marc001b'
+    // Index key 'marc.001b'
     private String marc001b;
 
 
@@ -164,9 +159,8 @@ public class OpensearchQuery {
 
         // Encode the query, but convert encoded blankspace from %2B (+) to %20 (real blank)
         // since Opensearch do not understand the separator character '+'
-        String encoding = URLEncoder.encode(query, StandardCharsets.UTF_8.toString()).replace("+", "%20");//s.replace(".", "%2E");
-        LOGGER.info("URL encoding: {}", encoding);
+        String encoded= URLEncoder.encode(query, StandardCharsets.UTF_8.toString()).replace("+", "%20");
 
-        return encoding;
+        return encoded;
     }
 }
