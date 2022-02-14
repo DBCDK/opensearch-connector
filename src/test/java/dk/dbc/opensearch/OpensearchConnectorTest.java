@@ -1,7 +1,3 @@
-/*
- * Copyright Dansk Bibliotekscenter a/s. Licensed under GPLv3
- * See license text in LICENSE.txt or at https://opensource.dbc.dk/licenses/gpl-3.0/
- */
 package dk.dbc.opensearch;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -233,5 +229,17 @@ public class OpensearchConnectorTest {
         assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[6].getSubfield().length, is(1));
         assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[6].getSubfield()[0].getCode(), is("b"));
         assertThat(result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[6].getSubfield()[0].getValue(), is("5053083221386"));
+    }
+
+    @Test
+    public void testOpensearchMarc001bSearchresult() throws OpensearchConnectorException {
+        OpensearchSearchResponse response = connector.search(new OpensearchQuery()
+                .withIs("9788761671332")
+                .withMarc001b("870970"));
+        OpensearchResult result = response.getResult();
+        assertThat(result.hitCount, is(1));
+        assertThat(result.collectionCount, is(1));
+
+        assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
     }
 }

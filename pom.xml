@@ -25,7 +25,7 @@
   </parent>
 
   <artifactId>opensearch-connector</artifactId>
-  <version>1.1-SNAPSHOT</version>
+  <version>1.2-SNAPSHOT</version>
   <name>opensearch-connector</name>
 
   <properties>
@@ -63,6 +63,7 @@
     <dependency>
       <groupId>org.eclipse.microprofile</groupId>
       <artifactId>microprofile</artifactId>
+      <version>${microprofile.version}</version>
       <type>pom</type>
     </dependency>
     <dependency>

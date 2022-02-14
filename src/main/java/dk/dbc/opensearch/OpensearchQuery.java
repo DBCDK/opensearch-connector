@@ -1,8 +1,3 @@
-/*
- * Copyright Dansk Bibliotekscenter a/s. Licensed under GPLv3
- * See license text in LICENSE.txt or at https://opensource.dbc.dk/licenses/gpl-3.0/
- */
-
 package dk.dbc.opensearch;
 
 import org.slf4j.Logger;
@@ -34,6 +29,10 @@ public class OpensearchQuery {
 
     // Index key 'bc'
     private String bc;
+
+    // Index key 'marc.001b'
+    private String marc001b;
+
 
     /* Place future needed index key fields here */
 
@@ -67,6 +66,14 @@ public class OpensearchQuery {
 
     public void setBc(String bc) {
         this.bc = bc;
+    }
+
+    public String getMarc001b() {
+        return this.marc001b;
+    }
+
+    public void setMarc001b(String marc001b) {
+        this.marc001b = marc001b;
     }
 
     public int getStart() {
@@ -113,6 +120,11 @@ public class OpensearchQuery {
         return this;
     }
 
+    public OpensearchQuery withMarc001b(String marc001b) {
+        this.marc001b = marc001b;
+        return this;
+    }
+
     public OpensearchQuery withCombiner(OpensearchQueryCombiner combiner) {
         this.combiner = combiner;
         return this;
@@ -141,9 +153,14 @@ public class OpensearchQuery {
         if(this.bc != null && !this.bc.isBlank()) {
             query = addToQueryString(query, "bc=" + bc);
         }
+        if(this.marc001b != null && !this.marc001b.isBlank()) {
+            query = addToQueryString(query, "marc.001b=" + marc001b);
+        }
 
         // Encode the query, but convert encoded blankspace from %2B (+) to %20 (real blank)
         // since Opensearch do not understand the separator character '+'
-        return URLEncoder.encode(query, StandardCharsets.UTF_8.toString()).replace("+", "%20");
+        String encoded= URLEncoder.encode(query, StandardCharsets.UTF_8.toString()).replace("+", "%20");
+
+        return encoded;
     }
 }

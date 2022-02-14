@@ -1,0 +1,19 @@
+{
+  "id" : "6184a6f1-7b69-3db3-8494-8fe98edd6990",
+  "request" : {
+    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=100200&stepValue=10&profile=test&query=is%3D9788761671332%20AND%20marc.001b%3D870970&start=1&action=search&outputType=json&repository=rawrepo_basis",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-(root)-uhHJa.json",
+    "headers" : {
+      "date" : "Mon, 14 Feb 2022 13:22:26 GMT",
+      "server" : "Apache/2.4.38 (Debian)",
+      "dbcdk-action" : "search",
+      "dbcdk-agency" : "100200",
+      "content-type" : "application/json"
+    }
+  },
+  "uuid" : "6184a6f1-7b69-3db3-8494-8fe98edd6990"
+}
