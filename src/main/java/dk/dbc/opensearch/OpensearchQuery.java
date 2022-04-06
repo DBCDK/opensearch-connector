@@ -33,11 +33,8 @@ public class OpensearchQuery {
     // Index key 'marc.001b'
     private String marc001b;
 
-    // Index key 'marc.021e'
+    // Index key 'term.021ex'
     private String term021ex;
-
-    // Query directly on cql
-    private String cqlQuery;
 
     /* Place future needed index key fields here */
 
@@ -105,14 +102,6 @@ public class OpensearchQuery {
         this.stepValue = stepValue;
     }
 
-    public String getCqlQuery() {
-        return this.cqlQuery;
-    }
-
-    public void setCqlQuery(String cqlQuery) {
-        this.cqlQuery = cqlQuery;
-    }
-
     public void setCombiner(OpensearchQueryCombiner combiner) {
         this.combiner = combiner;
     }
@@ -151,11 +140,6 @@ public class OpensearchQuery {
         return this;
     }
 
-    public OpensearchQuery withCqlQuery(String cqlQuery) {
-        this.cqlQuery = cqlQuery;
-        return this;
-    }
-
     public OpensearchQuery withCombiner(OpensearchQueryCombiner combiner) {
         this.combiner = combiner;
         return this;
@@ -189,9 +173,6 @@ public class OpensearchQuery {
         }
         if(this.term021ex != null && !this.term021ex.isBlank()) {
             query = addToQueryString(query, "term.021ex=" + term021ex);
-        }
-        if(this.cqlQuery != null && !this.cqlQuery.isBlank()) {
-            query = addToQueryString(query, cqlQuery);
         }
 
         // Encode the query, but convert encoded blankspace from %2B (+) to %20 (real blank)
