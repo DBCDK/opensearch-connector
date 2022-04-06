@@ -1,0 +1,22 @@
+{
+  "id" : "0c2e66e4-936e-32a0-893c-4e1af2467652",
+  "request" : {
+    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=100200&stepValue=10&profile=test&query=is%3D9788778689825&start=1&action=search&outputType=json&repository=rawrepo_basis",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-(root)-E4skf.json",
+    "headers" : {
+      "Date" : "Wed, 06 Apr 2022 10:32:40 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "dbcdk-action" : "search",
+      "dbcdk-agency" : "100200",
+      "Keep-Alive" : "timeout=5, max=100",
+      "Connection" : "Keep-Alive",
+      "Transfer-Encoding" : "chunked",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "0c2e66e4-936e-32a0-893c-4e1af2467652"
+}

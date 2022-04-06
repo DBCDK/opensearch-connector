@@ -33,6 +33,8 @@ public class OpensearchQuery {
     // Index key 'marc.001b'
     private String marc001b;
 
+    // Index key 'term.021ex'
+    private String term021ex;
 
     /* Place future needed index key fields here */
 
@@ -74,6 +76,14 @@ public class OpensearchQuery {
 
     public void setMarc001b(String marc001b) {
         this.marc001b = marc001b;
+    }
+
+    public String getTerm021ex() {
+        return this.term021ex;
+    }
+
+    public void setTerm021ex(String term021ex) {
+        this.term021ex = term021ex;
     }
 
     public int getStart() {
@@ -125,6 +135,11 @@ public class OpensearchQuery {
         return this;
     }
 
+    public OpensearchQuery withTerm021ex(String term021ex) {
+        this.term021ex = term021ex;
+        return this;
+    }
+
     public OpensearchQuery withCombiner(OpensearchQueryCombiner combiner) {
         this.combiner = combiner;
         return this;
@@ -155,6 +170,9 @@ public class OpensearchQuery {
         }
         if(this.marc001b != null && !this.marc001b.isBlank()) {
             query = addToQueryString(query, "marc.001b=" + marc001b);
+        }
+        if(this.term021ex != null && !this.term021ex.isBlank()) {
+            query = addToQueryString(query, "term.021ex=" + term021ex);
         }
 
         // Encode the query, but convert encoded blankspace from %2B (+) to %20 (real blank)

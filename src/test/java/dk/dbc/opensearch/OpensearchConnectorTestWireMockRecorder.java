@@ -9,7 +9,7 @@ public class OpensearchConnectorTestWireMockRecorder {
         /*
         Steps to reproduce wiremock recording:
 
-        * Start standalone runner
+        * Start standalone runner in src/test/resources (That contains __files and mappings)
             java -jar wiremock-standalone-{WIRE_MOCK_VERSION}.jar --proxy-all="{Opensearch_SERVICE_HOST}" --record-mappings --verbose
 
         * Run the main method of this class
@@ -35,6 +35,7 @@ public class OpensearchConnectorTestWireMockRecorder {
         OpensearchConnectorTest.testOpensearchGetFaustFromResult();
         OpensearchConnectorTest.testOpensearchCombinedSearch();
         OpensearchConnectorTest.testOpensearchBcSearchresult();
+        OpensearchConnectorTest.testOpensearchTerm021exSearchresult();
     }
 
 }

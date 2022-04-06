@@ -5,6 +5,7 @@ import dk.dbc.httpclient.HttpClient;
 
 import dk.dbc.opensearch.model.OpensearchResult;
 import dk.dbc.opensearch.model.OpensearchSearchResponse;
+import dk.dbc.opensearch.model.marcx.OpensearchMarcxRecord;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.junit.jupiter.api.AfterAll;
@@ -233,13 +234,55 @@ public class OpensearchConnectorTest {
 
     @Test
     public void testOpensearchMarc001bSearchresult() throws OpensearchConnectorException {
+        String isbn = "9788761671332";
+
         OpensearchSearchResponse response = connector.search(new OpensearchQuery()
-                .withIs("9788761671332")
+                .withIs(isbn)
                 .withMarc001b("870970"));
         OpensearchResult result = response.getResult();
         assertThat(result.hitCount, is(1));
         assertThat(result.collectionCount, is(1));
 
         assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
+        assertThat("Result", result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[4].getTag(), is("021"));
+        assertThat("Result", result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[4].getSubfield()[0].getCode(), is("e"));
+        assertThat("Result", result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord().getDatafield()[4].getSubfield()[0].getValue(), is(isbn));
+    }
+
+    @Test
+    public void testOpensearchTerm021exSearchresult() throws OpensearchConnectorException {
+        String isbn = "9788778689825";
+
+        OpensearchSearchResponse response = connector.search(new OpensearchQuery().withTerm021ex(isbn));
+        OpensearchResult result = response.getResult();
+        assertThat(result.hitCount, is(1));
+        assertThat(result.collectionCount, is(1));
+        assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
+        OpensearchMarcxRecord record = result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord();
+
+        assertThat(record.getDatafield()[5].getTag(), is("021"));
+        assertThat(record.getDatafield()[5].getSubfield()[0].getCode(), is("e"));
+        assertThat(record.getDatafield()[5].getSubfield()[0].getValue(), is(isbn));
+
+        assertThat(record.getDatafield()[7].getTag(), is("245"));
+        assertThat(record.getDatafield()[7].getSubfield()[0].getCode(), is("a"));
+        assertThat(record.getDatafield()[7].getSubfield()[0].getValue(), is("Lamberths navnebog"));
+
+        // Ensure this result is different than is=`isbn`
+        OpensearchSearchResponse response2 = connector.search(new OpensearchQuery().withIs(isbn));
+        OpensearchResult result2 = response2.getResult();
+        assertThat(result2.hitCount, is(2));
+        assertThat(result2.collectionCount, is(2));
+        OpensearchMarcxRecord record1 = result2.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord();
+        OpensearchMarcxRecord record2 = result2.getSearchResult()[1].getCollection().getObject()[0].getCollection().getRecord();
+
+        assertThat(record1.getDatafield()[7].getTag(), is("245"));
+        assertThat(record1.getDatafield()[7].getSubfield()[0].getCode(), is("a"));
+        assertThat(record1.getDatafield()[7].getSubfield()[0].getValue(), is("Lamberths navnebog"));
+
+        assertThat(record2.getDatafield()[7].getTag(), is("245"));
+        assertThat(record2.getDatafield()[7].getSubfield()[0].getCode(), is("a"));
+        assertThat(record2.getDatafield()[7].getSubfield()[0].getValue(), is("Lamberths navnebog"));
+
     }
 }
