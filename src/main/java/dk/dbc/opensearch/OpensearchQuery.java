@@ -5,7 +5,9 @@ import org.slf4j.LoggerFactory;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class OpensearchQuery {
     private static final Logger LOGGER = LoggerFactory.getLogger(OpensearchQuery.class);
@@ -75,8 +77,12 @@ public class OpensearchQuery {
         return this.marc001b;
     }
 
+    public void setMarc001b(List<String> marc001b) {
+        this.marc001b = marc001b;
+    }
+
     public void setMarc001b(String marc001b) {
-        this.marc001b.add(marc001b);
+        this.setMarc001b(List.of(marc001b));
     }
 
     public String getTerm021ex() {
@@ -131,9 +137,13 @@ public class OpensearchQuery {
         return this;
     }
 
-    public OpensearchQuery withMarc001b(String marc001b) {
-        this.marc001b.add(marc001b);
+    public OpensearchQuery withMarc001b(List<String> marc001b) {
+        this.marc001b = marc001b;
         return this;
+    }
+
+    public OpensearchQuery withMarc001b(String marc001b) {
+        return this.withMarc001b(List.of(marc001b));
     }
 
     public OpensearchQuery withTerm021ex(String term021ex) {
@@ -152,19 +162,6 @@ public class OpensearchQuery {
                 : " OR ";
 
         return (!query.isEmpty() ? query + separator : "") + term;
-    }
-
-    private String addMarc001b() {
-        if (marc001b.size() > 1) {
-            StringBuilder collector = new StringBuilder("(");
-            for (int i = 0; i < marc001b.size(); i++) {
-                if (i < marc001b.size() - 1) collector.append("marc.001b=").append(marc001b.get(i)).append(" OR ");
-                else collector.append("marc.001b=").append(marc001b.get(i)).append(")");
-            }
-            return collector.toString();
-        } else {
-            return "(marc.001b=" + marc001b.get(0) + ")";
-        }
     }
 
     public String build() throws java.io.UnsupportedEncodingException {
@@ -186,7 +183,8 @@ public class OpensearchQuery {
             query = addToQueryString(query, "term.021ex=" + term021ex);
         }
         if(this.marc001b != null && !this.marc001b.isEmpty() && !query.isEmpty()) {
-            query = "(" + query + ") AND " + addMarc001b();
+            String joinedMarc001b = this.marc001b.stream().collect(Collectors.joining(" OR (marc.001b=", "(marc.001b=", ")"));
+            query = "(" + query + ") AND " + joinedMarc001b;
         }
 
         // Encode the query, but convert encoded blankspace from %2B (+) to %20 (real blank)
