@@ -1,7 +1,7 @@
 {
   "id" : "6184a6f1-7b69-3db3-8494-8fe98edd6990",
   "request" : {
-    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=100200&stepValue=10&profile=test&query=is%3D9788761671332%20AND%20marc.001b%3D870970&start=1&action=search&outputType=json&repository=rawrepo_basis",
+    "url" : "/?collectionType=work&objectFormat=marcxchange&agency=100200&stepValue=10&profile=test&query=%28is%3D9788761671332%29%20AND%20marc.001b%3D870970&start=1&action=search&outputType=json&repository=rawrepo_basis",
     "method" : "GET"
   },
   "response" : {

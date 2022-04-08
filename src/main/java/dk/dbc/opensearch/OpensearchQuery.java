@@ -168,11 +168,11 @@ public class OpensearchQuery {
         if(this.bc != null && !this.bc.isBlank()) {
             query = addToQueryString(query, "bc=" + bc);
         }
-        if(this.marc001b != null && !this.marc001b.isBlank()) {
-            query = addToQueryString(query, "marc.001b=" + marc001b);
-        }
         if(this.term021ex != null && !this.term021ex.isBlank()) {
             query = addToQueryString(query, "term.021ex=" + term021ex);
+        }
+        if(this.marc001b != null && !this.marc001b.isBlank() && !query.isEmpty()) {
+            query = "(" + query + ") AND marc.001b=" + marc001b;
         }
 
         // Encode the query, but convert encoded blankspace from %2B (+) to %20 (real blank)
