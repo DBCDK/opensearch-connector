@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.client.Client;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
@@ -239,6 +240,7 @@ public class OpensearchConnectorTest {
         OpensearchSearchResponse response = connector.search(new OpensearchQuery()
                 .withIs(isbn)
                 .withMarc001b("870970"));
+
         OpensearchResult result = response.getResult();
         assertThat(result.hitCount, is(1));
         assertThat(result.collectionCount, is(1));
