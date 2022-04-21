@@ -239,8 +239,7 @@ public class OpensearchConnectorTest {
 
         OpensearchSearchResponse response = connector.search(new OpensearchQuery()
                 .withIs(isbn)
-                .withMarc001b("870970")
-        );
+                .withMarc001b("870970"));
 
         OpensearchResult result = response.getResult();
         assertThat(result.hitCount, is(1));
