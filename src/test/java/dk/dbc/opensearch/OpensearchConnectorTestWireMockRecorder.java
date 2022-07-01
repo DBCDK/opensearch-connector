@@ -36,6 +36,8 @@ public class OpensearchConnectorTestWireMockRecorder {
         OpensearchConnectorTest.testOpensearchCombinedSearch();
         OpensearchConnectorTest.testOpensearchBcSearchresult();
         OpensearchConnectorTest.testOpensearchTerm021exSearchresult();
+        OpensearchConnectorTest.testOpensearchLdSearchResult();
+        OpensearchConnectorTest.testOpensearchSeveralMarc001bSearchResult();
     }
 
 }

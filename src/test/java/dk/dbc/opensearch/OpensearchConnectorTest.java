@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import javax.ws.rs.client.Client;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
@@ -30,6 +29,8 @@ public class OpensearchConnectorTest {
             .register(new JacksonFeature()));
     static OpensearchConnector connector;
 
+    static OpensearchConnector connector1;
+
     @BeforeAll
     static void startWireMockServer() {
 
@@ -43,6 +44,7 @@ public class OpensearchConnectorTest {
     @BeforeAll
     static void setConnector() throws OpensearchConnectorException {
         connector = new OpensearchConnector(CLIENT, wireMockHost, "test", "100200", "rawrepo_basis");
+        connector1 = new OpensearchConnector(CLIENT, wireMockHost, "dbckat", "010100", "rawrepo_basis");
     }
 
     @AfterAll
@@ -285,6 +287,47 @@ public class OpensearchConnectorTest {
         assertThat(record2.getDatafield()[7].getTag(), is("245"));
         assertThat(record2.getDatafield()[7].getSubfield()[0].getCode(), is("a"));
         assertThat(record2.getDatafield()[7].getSubfield()[0].getValue(), is("Lamberths navnebog"));
+    }
 
+    @Test
+    public void testOpensearchLdSearchResult() throws OpensearchConnectorException {
+        String ld = "29885966";
+
+        OpensearchSearchResponse response = connector1.search(new OpensearchQuery().withMarc001b("870976").withLd(ld));
+        OpensearchResult result = response.getResult();
+        assertThat(result.hitCount, is(1));
+        assertThat(result.collectionCount, is(1));
+        assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
+        OpensearchMarcxRecord record = result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord();
+
+        assertThat(record.getDatafield()[0].getTag(), is("001"));
+        assertThat(record.getDatafield()[0].getSubfield()[0].getCode(), is("a"));
+        assertThat(record.getDatafield()[0].getSubfield()[0].getValue(), is("129024038"));
+        assertThat(record.getDatafield()[0].getSubfield()[1].getCode(), is("b"));
+        assertThat(record.getDatafield()[0].getSubfield()[1].getValue(), is("870976"));
+
+        assertThat(record.getDatafield()[4].getTag(), is("700"));
+        assertThat(record.getDatafield()[4].getSubfield()[0].getCode(), is("a"));
+        assertThat(record.getDatafield()[4].getSubfield()[0].getValue(), is("Bennetsen"));
+        assertThat(record.getDatafield()[4].getSubfield()[1].getCode(), is("h"));
+        assertThat(record.getDatafield()[4].getSubfield()[1].getValue(), is("Elisabeth"));
+    }
+
+    @Test
+    public void testOpensearchSeveralMarc001bSearchResult() throws OpensearchConnectorException {
+        String id = "29885966";
+
+        OpensearchSearchResponse response = connector1.search(new OpensearchQuery().withMarc001b(Arrays.asList("870976","870970")).withId(id));
+        OpensearchResult result = response.getResult();
+        assertThat(result.hitCount, is(1));
+        assertThat(result.collectionCount, is(1));
+        assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
+        OpensearchMarcxRecord record = result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord();
+
+        assertThat(record.getDatafield()[6].getTag(), is("245"));
+        assertThat(record.getDatafield()[0].getSubfield()[1].getCode(), is("b"));
+        assertThat(record.getDatafield()[0].getSubfield()[1].getValue(), is("870970"));
+        assertThat(record.getDatafield()[6].getSubfield()[0].getCode(), is("a"));
+        assertThat(record.getDatafield()[6].getSubfield()[0].getValue(), is("Fra legepladsen"));
     }
 }

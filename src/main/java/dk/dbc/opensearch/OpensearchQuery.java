@@ -39,6 +39,9 @@ public class OpensearchQuery {
     // Index key 'term.021ex'
     private String term021ex;
 
+    // Index key 'ld'
+    private String ld;
+
     /* Place future needed index key fields here */
 
     public String getFreetext() {
@@ -91,6 +94,14 @@ public class OpensearchQuery {
 
     public void setTerm021ex(String term021ex) {
         this.term021ex = term021ex;
+    }
+
+    public String getLd() {
+        return this.ld;
+    }
+
+    public void setLd(String ld) {
+        this.ld = ld;
     }
 
     public int getStart() {
@@ -151,6 +162,11 @@ public class OpensearchQuery {
         return this;
     }
 
+    public OpensearchQuery withLd(String ld) {
+        this.ld = ld;
+        return this;
+    }
+
     public OpensearchQuery withCombiner(OpensearchQueryCombiner combiner) {
         this.combiner = combiner;
         return this;
@@ -182,8 +198,11 @@ public class OpensearchQuery {
         if(this.term021ex != null && !this.term021ex.isBlank()) {
             query = addToQueryString(query, "term.021ex=" + term021ex);
         }
+        if(this.ld != null && !this.ld.isBlank()) {
+            query = addToQueryString(query, "ld=" + ld);
+        }
         if(this.marc001b != null && !this.marc001b.isEmpty() && !query.isEmpty()) {
-            String joinedMarc001b = this.marc001b.stream().collect(Collectors.joining(" OR (marc.001b=", "(marc.001b=", ")"));
+            String joinedMarc001b = this.marc001b.stream().collect(Collectors.joining(" OR marc.001b=", "(marc.001b=", ")"));
             query = "(" + query + ") AND " + joinedMarc001b;
         }
 
