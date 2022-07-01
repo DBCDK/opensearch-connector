@@ -300,6 +300,12 @@ public class OpensearchConnectorTest {
         assertThat(result.getSearchResult()[0].getCollection().getNumberOfObjects(), is(1));
         OpensearchMarcxRecord record = result.getSearchResult()[0].getCollection().getObject()[0].getCollection().getRecord();
 
+        assertThat(record.getDatafield()[0].getTag(), is("001"));
+        assertThat(record.getDatafield()[0].getSubfield()[0].getCode(), is("a"));
+        assertThat(record.getDatafield()[0].getSubfield()[0].getValue(), is("129024038"));
+        assertThat(record.getDatafield()[0].getSubfield()[1].getCode(), is("b"));
+        assertThat(record.getDatafield()[0].getSubfield()[1].getValue(), is("870976"));
+
         assertThat(record.getDatafield()[4].getTag(), is("700"));
         assertThat(record.getDatafield()[4].getSubfield()[0].getCode(), is("a"));
         assertThat(record.getDatafield()[4].getSubfield()[0].getValue(), is("Bennetsen"));
