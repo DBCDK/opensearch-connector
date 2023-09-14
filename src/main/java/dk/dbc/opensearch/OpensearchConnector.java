@@ -1,21 +1,15 @@
-/*
- * Copyright Dansk Bibliotekscenter a/s. Licensed under GPLv3
- * See license text in LICENSE.txt or at https://opensource.dbc.dk/licenses/gpl-3.0/
- */
-
 package dk.dbc.opensearch;
 
 import dk.dbc.httpclient.FailSafeHttpClient;
 import dk.dbc.httpclient.HttpGet;
-import dk.dbc.invariant.InvariantUtil;
 
 import dk.dbc.opensearch.model.OpensearchEntity;
 import dk.dbc.opensearch.model.OpensearchSearchResponse;
 import net.jodah.failsafe.RetryPolicy;
 
-import javax.ws.rs.ProcessingException;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.ProcessingException;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.core.Response;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
@@ -45,12 +39,12 @@ public class OpensearchConnector {
             .withDelay(Duration.ofSeconds(5))
             .withMaxRetries(3);
 
-    private FailSafeHttpClient failSafeHttpClient;
-    private String baseUrl;
+    private final FailSafeHttpClient failSafeHttpClient;
+    private final String baseUrl;
 
-    private String profile;
-    private String agency;
-    private String repository;
+    private final String profile;
+    private final String agency;
+    private final String repository;
 
     public OpensearchConnector(Client httpClient, String baseUrl, String profile, String agency, String repository) {
         this(FailSafeHttpClient.create(httpClient, RETRY_POLICY), baseUrl, profile, agency, repository);
@@ -61,19 +55,28 @@ public class OpensearchConnector {
      *
      * @param failSafeHttpClient web resources client with custom retry policy
      * @param baseUrl            base URL for record service endpoint
-     * @throws OpensearchConnectorException on failure to create {@link dk.dbc.opensearch.OpensearchConnector}
      */
     public OpensearchConnector(FailSafeHttpClient failSafeHttpClient, String baseUrl, String profile, String agency, String repository) {
-        this.failSafeHttpClient = InvariantUtil.checkNotNullOrThrow(
-                failSafeHttpClient, "failSafeHttpClient");
-        this.baseUrl = InvariantUtil.checkNotNullNotEmptyOrThrow(
-                baseUrl, "baseUrl");
-        this.profile = InvariantUtil.checkNotNullNotEmptyOrThrow(
-                profile, "profile");
-        this.agency = InvariantUtil.checkNotNullNotEmptyOrThrow(
-                agency, "agency");
-        this.repository = InvariantUtil.checkNotNullNotEmptyOrThrow(
-                repository, "repository");
+        this.failSafeHttpClient = checkNotNullOrThrow(failSafeHttpClient, "failSafeHttpClient");
+        this.baseUrl = checkNotNullNotEmptyOrThrow(baseUrl, "baseUrl");
+        this.profile = checkNotNullNotEmptyOrThrow(profile, "profile");
+        this.agency = checkNotNullNotEmptyOrThrow(agency, "agency");
+        this.repository = checkNotNullNotEmptyOrThrow(repository, "repository");
+    }
+
+    private <T> T checkNotNullOrThrow(T value, String parameter) {
+        if (value == null) {
+            throw new NullPointerException(String.format("Parameter %s can not be null", parameter));
+        }
+        return value;
+    }
+
+    private String checkNotNullNotEmptyOrThrow(String value, String parameter) {
+        checkNotNullOrThrow(value, parameter);
+        if (value.isEmpty()) {
+            throw new IllegalArgumentException(String.format("Parameter %s can not be empty", parameter));
+        }
+        return value;
     }
 
     public OpensearchSearchResponse search(OpensearchQuery query) throws OpensearchConnectorException {
@@ -97,7 +100,7 @@ public class OpensearchConnector {
 
             return sendGetRequest(httpGet);
         } catch(java.io.UnsupportedEncodingException exception) {
-            LOGGER.error("Query contains characters that can not be url encoded: {}", exception);
+            LOGGER.error("Query contains characters that can not be url encoded", exception);
             throw new OpensearchConnectorException("Query contains characters that can not be url encoded", exception);
         } finally {
             LOGGER.info("search took {} ms", stopwatch.getElapsedTime(TimeUnit.MILLISECONDS));
