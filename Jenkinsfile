@@ -1,6 +1,6 @@
 #!groovy
 
-def workerNode = "devel10"
+def workerNode = "devel11"
 
 pipeline {
 	agent {label workerNode}
@@ -11,6 +11,10 @@ pipeline {
 	options {
 		timestamps()
 	}
+  triggers {
+    upstream('/Docker-payara6-bump-trigger')
+  }
+
 	stages {
 		stage("clear workspace") {
 			steps {
